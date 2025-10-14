@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { LogIn, UserPlus, Coins, Plus, LogOut, User } from "lucide-react";
+import { LogIn, UserPlus, Coins, Plus, LogOut, User, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Badge } from "@/components/ui/badge";
@@ -11,6 +11,7 @@ import { useCreditSystem } from "@/hooks/useCreditSystem";
 import { CreditHistoryModal } from "@/components/CreditHistoryModal";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { useNavigate, useLocation } from "react-router-dom";
 
 // Helper function to open help contact
 const openHelpContact = () => {
@@ -39,6 +40,8 @@ export function TopBar() {
   const [showAuth, setShowAuth] = useState(false);
   const [authMode, setAuthMode] = useState<"login" | "signup">("login");
   const [showCreditHistory, setShowCreditHistory] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
   
   const handleGoogleSignIn = async () => {
     await signInWithGoogle();
@@ -55,10 +58,23 @@ export function TopBar() {
           <SidebarTrigger className="text-text-secondary hover:text-foreground" />
         </div>
 
-        {/* Right: Theme Toggle, Credits and Auth */}
+        {/* Right: Theme Toggle, My Startup, Credits and Auth */}
         <div className="flex items-center gap-2 sm:gap-4">
           {/* Theme Toggle */}
           <ThemeToggle />
+
+          {/* My Startup quick access */}
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => {
+              if (location.pathname !== '/my-startup') navigate('/my-startup');
+            }}
+            className="hidden sm:inline-flex h-8 px-2 sm:px-3 bg-surface border border-border hover:bg-sidebar-hover text-xs sm:text-sm"
+          >
+            <Building2 className="w-3 h-3 sm:mr-1" />
+            <span className="hidden sm:inline">My Startup</span>
+          </Button>
           
           {/* Credits Display */}
           <div className="flex items-center gap-1 sm:gap-2">

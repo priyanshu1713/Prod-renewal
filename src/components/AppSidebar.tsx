@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { MessageSquare, History, ChevronRight, ChevronDown, Building2, Search, Plus, Settings, User, Edit2, Trash2 } from "lucide-react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarHeader, SidebarFooter, SidebarInput, useSidebar } from "@/components/ui/sidebar";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/components/ThemeProvider";
-import { StartupFormModal } from "@/components/StartupFormModal";
-import { useStartupContext } from "@/hooks/useStartupContext";
+// import { useStartupContext } from "@/hooks/useStartupContext";
 
 // Import agent profile images
 const ViraAvatar = "https://i.ibb.co/TB072BQ1/Vira.png";
@@ -59,11 +58,10 @@ export function AppSidebar() {
     isMobile
   } = useSidebar();
   const { theme } = useTheme();
-  const { hasStartupData } = useStartupContext();
   const location = useLocation();
+  const navigate = useNavigate();
   const isCollapsed = state === "collapsed" && !isMobile; // Never collapse on mobile
   const [isModulesExpanded, setIsModulesExpanded] = useState(true);
-  const [showStartupModal, setShowStartupModal] = useState(false);
   const isActive = (path: string) => location.pathname === path;
   
   // Determine which logo to show based on theme
@@ -109,7 +107,7 @@ export function AppSidebar() {
         <div className="mb-6">
           <Button 
             variant="secondary" 
-            onClick={() => setShowStartupModal(true)}
+            onClick={() => navigate('/my-startup')}
             className="w-full justify-start gap-3 border border-border transition-all duration-300 hover:bg-sidebar-hover rounded-xl h-11 group"
           >
             <Building2 className="w-4 h-4 group-hover:scale-110 transition-transform" />
@@ -245,9 +243,6 @@ export function AppSidebar() {
         </div>
       </SidebarFooter>
       
-      <StartupFormModal 
-        open={showStartupModal} 
-        onOpenChange={setShowStartupModal} 
-      />
+      {/* Startup form now lives at /my-startup */}
     </Sidebar>;
 }

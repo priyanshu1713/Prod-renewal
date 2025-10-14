@@ -12,6 +12,7 @@ import Bizzy from "./pages/Bizzy";
 import Artie from "./pages/Artie";
 import Mak from "./pages/Mak";
 import Vira from "./pages/Vira";
+import MyStartup from "./pages/MyStartup";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -38,6 +39,7 @@ const App = () => {
                 <Route path="/artie" element={<Artie />} />
                 <Route path="/mak" element={<Mak />} />
                 <Route path="/vira" element={<Vira />} />
+                <Route path="/my-startup" element={<MyStartup />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
