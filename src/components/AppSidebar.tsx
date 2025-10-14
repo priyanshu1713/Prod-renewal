@@ -71,7 +71,7 @@ export function AppSidebar() {
     ? "/lovable-uploads/3661269c-226c-4091-834a-d29b93d8d54f.png"
     : "/lovable-uploads/60c9d900-181b-42b8-88fc-44cc13f5c207.png";
   
-  return <Sidebar className="border-r border-sidebar-border bg-sidebar">
+  return <Sidebar className="border-r border-sidebar-border bg-sidebar shadow-[2px_0_12px_rgba(0,0,0,0.2)]">
       <SidebarHeader className="p-4 sm:p-6 border-b border-sidebar-border">
         <NavLink to="/" className="flex items-center gap-3 hover:opacity-80 transition-all duration-300 group">
           <div className="w-10 h-10 bg-surface border border-border rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow">

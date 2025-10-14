@@ -16,36 +16,41 @@ interface Message {
   role: "user" | "assistant";
   timestamp: Date;
 }
-const quickActions = [{
-  id: "bizzy",
-  title: "Bizzy",
-  subtitle: "Business strategist",
-  path: "/bizzy",
-  // Slightly lighter tone (~15%) for a softer look
-  color: "#65A1E6",
-  hoverColor: "hover:border-[#65A1E6] hover:shadow-[0_0_20px_rgba(101,161,230,0.28)]"
-}, {
-  id: "artie",
-  title: "Artie", 
-  subtitle: "Creative designer",
-  path: "/artie",
-  color: "#E988C0",
-  hoverColor: "hover:border-[#E988C0] hover:shadow-[0_0_20px_rgba(233,136,192,0.28)]"
-}, {
-  id: "mak",
-  title: "Mak",
-  subtitle: "Social media handler", 
-  path: "/mak",
-  color: "#7DC580",
-  hoverColor: "hover:border-[#7DC580] hover:shadow-[0_0_20px_rgba(125,197,128,0.28)]"
-}, {
-  id: "vira",
-  title: "Vira",
-  subtitle: "Virtual Co-Founder",
-  path: "/vira",
-  color: "#A58AD4",
-  hoverColor: "hover:border-[#A58AD4] hover:shadow-[0_0_20px_rgba(165,138,212,0.28)]"
-}];
+const quickActions = [
+  {
+    id: "bizzy",
+    title: "Bizzy",
+    subtitle: "Business strategist",
+    path: "/bizzy",
+    // Slightly lighter tone (~15%) for a softer look
+    color: "#65A1E6",
+    hoverColor: "hover:border-[#65A1E6] hover:shadow-[0_0_20px_rgba(101,161,230,0.28)]",
+  },
+  {
+    id: "artie",
+    title: "Artie",
+    subtitle: "Creative designer",
+    path: "/artie",
+    color: "#E988C0",
+    hoverColor: "hover:border-[#E988C0] hover:shadow-[0_0_20px_rgba(233,136,192,0.28)]",
+  },
+  {
+    id: "mak",
+    title: "Mak",
+    subtitle: "Social media handler",
+    path: "/mak",
+    color: "#7DC580",
+    hoverColor: "hover:border-[#7DC580] hover:shadow-[0_0_20px_rgba(125,197,128,0.28)]",
+  },
+  {
+    id: "vira",
+    title: "Vira",
+    subtitle: "Virtual Co-Founder",
+    path: "/vira",
+    color: "#A58AD4",
+    hoverColor: "hover:border-[#A58AD4] hover:shadow-[0_0_20px_rgba(165,138,212,0.28)]",
+  },
+];
 export function Homepage() {
   const navigate = useNavigate();
   const { getContextString } = useStartupContext();
