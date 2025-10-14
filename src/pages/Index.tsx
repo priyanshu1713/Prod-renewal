@@ -7,7 +7,7 @@ import { QuickActionButton } from "@/components/QuickActionButton";
 
 const Index = () => {
   return (
-    <SidebarProvider defaultOpen={false} className="min-h-screen">
+    <SidebarProvider defaultOpen={true} className="min-h-screen">
       <div className="flex min-h-screen w-full bg-background">
         <div className="hidden lg:block">
           <AppSidebar />
@@ -15,7 +15,7 @@ const Index = () => {
         
         <div className="flex-1 flex flex-col">
           <TopBar />
-          <main className="flex-1 overflow-hidden lg:border-l border-border">
+          <main className="flex-1 overflow-hidden lg:border-l border-border lg:shadow-[inset_1px_0_0_0_hsl(var(--sidebar-border))]">
             <Homepage />
           </main>
         </div>

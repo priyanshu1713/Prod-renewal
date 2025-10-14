@@ -21,29 +21,30 @@ const quickActions = [{
   title: "Bizzy",
   subtitle: "Business strategist",
   path: "/bizzy",
-  color: "#4A90E2",
-  hoverColor: "hover:border-[#4A90E2] hover:shadow-[0_0_20px_rgba(74,144,226,0.3)]"
+  // Slightly lighter tone (~15%) for a softer look
+  color: "#65A1E6",
+  hoverColor: "hover:border-[#65A1E6] hover:shadow-[0_0_20px_rgba(101,161,230,0.28)]"
 }, {
   id: "artie",
   title: "Artie", 
   subtitle: "Creative designer",
   path: "/artie",
-  color: "#E573B5",
-  hoverColor: "hover:border-[#E573B5] hover:shadow-[0_0_20px_rgba(229,115,181,0.3)]"
+  color: "#E988C0",
+  hoverColor: "hover:border-[#E988C0] hover:shadow-[0_0_20px_rgba(233,136,192,0.28)]"
 }, {
   id: "mak",
   title: "Mak",
   subtitle: "Social media handler", 
   path: "/mak",
-  color: "#66BB6A",
-  hoverColor: "hover:border-[#66BB6A] hover:shadow-[0_0_20px_rgba(102,187,106,0.3)]"
+  color: "#7DC580",
+  hoverColor: "hover:border-[#7DC580] hover:shadow-[0_0_20px_rgba(125,197,128,0.28)]"
 }, {
   id: "vira",
   title: "Vira",
   subtitle: "Virtual Co-Founder",
   path: "/vira",
-  color: "#9575CD",
-  hoverColor: "hover:border-[#9575CD] hover:shadow-[0_0_20px_rgba(149,117,205,0.3)]"
+  color: "#A58AD4",
+  hoverColor: "hover:border-[#A58AD4] hover:shadow-[0_0_20px_rgba(165,138,212,0.28)]"
 }];
 export function Homepage() {
   const navigate = useNavigate();
@@ -197,23 +198,23 @@ export function Homepage() {
   return (
     <div className="flex flex-col h-full">
       {!isChatMode ? (
-        // Initial Home Interface - Futuristic Design
+        // Initial Home Interface - Clean, centered layout
         <div className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 min-h-screen">
-          <div className="w-full max-w-6xl mx-auto space-y-12 sm:space-y-16">
-            {/* Brand Title with Typewriter Effect */}
+          <div className="w-full max-w-5xl mx-auto space-y-10 sm:space-y-12">
+            {/* Brand Title */}
             <div className={`text-center transition-all duration-1000 ${showLogo ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
-              <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-raleway-dots text-foreground mb-3 tracking-wider">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-raleway-dots text-foreground mb-2 tracking-wider">
                 productica
               </h1>
-              <p className="text-sm sm:text-base text-text-muted font-light tracking-wide">
+              <p className="text-xs sm:text-sm text-text-muted font-extralight tracking-wide">
                 Your AI team for startup validation.
               </p>
             </div>
 
-            {/* Search Bar - Animated Pill Design */}
-            <div className={`relative max-w-3xl mx-auto transition-all duration-1000 delay-300 ${showLogo ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+            {/* Search Bar - thinner refined */}
+            <div className={`relative max-w-2xl mx-auto transition-all duration-1000 delay-300 ${showLogo ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
               <div className="relative flex items-center group">
-                <Search className="absolute left-5 sm:left-6 w-5 h-5 sm:w-6 sm:h-6 text-text-muted z-10 transition-colors group-focus-within:text-foreground" />
+                <Search className="absolute left-4 sm:left-5 w-5 h-5 text-text-muted z-10 transition-colors group-focus-within:text-foreground" />
                 <Input 
                   type="text" 
                   placeholder={placeholders[placeholderIndex]}
@@ -221,49 +222,45 @@ export function Homepage() {
                   onChange={e => setSearchQuery(e.target.value)} 
                   onKeyPress={handleKeyPress} 
                   disabled={isLoading}
-                  className="w-full h-14 sm:h-16 pl-14 sm:pl-16 pr-28 sm:pr-32 text-base sm:text-lg bg-card text-card-foreground border-2 border-border rounded-full 
-                            focus:ring-2 focus:ring-foreground/20 focus:border-foreground/30 focus:shadow-[0_0_30px_rgba(207,207,207,0.1)]
+                  className="w-full h-12 sm:h-14 pl-12 sm:pl-14 pr-28 sm:pr-32 text-base bg-card text-card-foreground border border-border rounded-xl 
+                            focus:ring-2 focus:ring-foreground/15 focus:border-foreground/20 focus:shadow-[0_6px_24px_rgba(0,0,0,0.25)]
                             transition-all duration-300 hover:border-border-hover hover:shadow-lg
-                            placeholder:text-text-muted/60 placeholder:transition-opacity placeholder:duration-500" 
+                            placeholder:text-text-muted/60" 
                 />
                 <Button 
                   onClick={handleSearch} 
                   disabled={!searchQuery.trim() || isLoading}
-                  className="absolute right-2 sm:right-3 h-10 sm:h-12 px-6 sm:px-8 bg-foreground text-background hover:bg-foreground/90 rounded-full
+                  className="absolute right-2 sm:right-3 h-9 sm:h-11 px-5 sm:px-6 bg-foreground text-background hover:bg-foreground/90 rounded-lg
                             transition-all duration-300 border-0 text-sm sm:text-base font-medium
-                            disabled:opacity-30 disabled:cursor-not-allowed
-                            hover:shadow-[0_0_20px_rgba(207,207,207,0.3)] hover:scale-105">
+                            disabled:opacity-30 disabled:cursor-not-allowed shadow-sm">
                   Submit
                 </Button>
               </div>
             </div>
 
-            {/* Agent Cards - Interactive Grid */}
-            <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 px-2 transition-all duration-1000 delay-500 ${showLogo ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+            {/* Agent Cards - compact grid */}
+            <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 px-2 transition-all duration-1000 delay-500 ${showLogo ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
               {quickActions.map((action, index) => (
                 <button
                   key={action.id} 
                   onClick={() => handleQuickAction(action.path)}
-                  className="group relative p-6 bg-card text-card-foreground border-2 border-border rounded-2xl
-                           transition-all duration-300 hover:scale-105 hover:-translate-y-1
-                           hover:shadow-xl hover:border-opacity-60
-                           active:scale-95"
+                  className="group relative p-5 bg-card text-card-foreground border border-border rounded-xl
+                           transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg active:scale-95"
                   style={{
                     borderColor: action.color,
                     transitionDelay: `${index * 100}ms`
                   }}
                 >
-                  {/* Glowing Ring Effect */}
+                  {/* Soft glow */}
                   <div 
-                    className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                     style={{
-                      boxShadow: `0 0 30px ${action.color}40, inset 0 0 30px ${action.color}10`
+                      boxShadow: `0 0 24px ${action.color}33, inset 0 0 24px ${action.color}14`
                     }}
                   />
-                  
                   {/* Content */}
                   <div className="relative z-10">
-                    <div className="text-2xl sm:text-3xl font-semibold mb-2" style={{ color: action.color }}>
+                    <div className="text-xl sm:text-2xl font-semibold mb-1" style={{ color: action.color }}>
                       {action.title}
                     </div>
                     <div className="text-xs sm:text-sm text-text-muted font-light">
