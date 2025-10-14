@@ -114,7 +114,7 @@ export function StartupForm() {
                     <SelectTrigger className="bg-input border-input-border focus:border-accent/50">
                       <SelectValue placeholder="Select industry" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-[#1a1a1a] text-neutral-200 shadow-lg rounded-lg border border-border">
                       {INDUSTRIES.map(item => (
                         <SelectItem key={item} value={item}>{item}</SelectItem>
                       ))}
@@ -127,7 +127,7 @@ export function StartupForm() {
                     <SelectTrigger className="bg-input border-input-border focus:border-accent/50">
                       <SelectValue placeholder="Select stage" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-[#1a1a1a] text-neutral-200 shadow-lg rounded-lg border border-border">
                       {STAGES.map(item => (
                         <SelectItem key={item} value={item}>{item}</SelectItem>
                       ))}
@@ -153,7 +153,7 @@ export function StartupForm() {
                     <SelectTrigger className="bg-input border-input-border focus:border-accent/50">
                       <SelectValue placeholder="Select model" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-[#1a1a1a] text-neutral-200 shadow-lg rounded-lg border border-border">
                       {BUSINESS_MODELS.map(item => (
                         <SelectItem key={item} value={item}>{item}</SelectItem>
                       ))}
@@ -172,7 +172,7 @@ export function StartupForm() {
                   <SelectTrigger className="bg-input border-input-border focus:border-accent/50">
                     <SelectValue placeholder="Select funding status" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-[#1a1a1a] text-neutral-200 shadow-lg rounded-lg border border-border">
                     {FUNDING_STATUS.map(item => (
                       <SelectItem key={item} value={item}>{item}</SelectItem>
                     ))}
