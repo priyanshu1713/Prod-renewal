@@ -263,11 +263,11 @@ export function ChatInterface() {
               </Avatar>
             </div>
             
-            <div className="space-y-4 animate-fade-in">
-              <h1 className="text-4xl font-bold text-foreground">
+                  <div className="space-y-3 animate-fade-in text-center">
+              <h1 className="text-3xl font-semibold text-foreground">
                 {moduleInfo.title}
               </h1>
-              <p className="text-lg text-text-secondary max-w-2xl">
+              <p className="text-base text-text-secondary max-w-2xl">
                 {moduleInfo.subtitle}
               </p>
             </div>
