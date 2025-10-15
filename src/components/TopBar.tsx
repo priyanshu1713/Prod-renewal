@@ -12,6 +12,7 @@ import { CreditHistoryModal } from "@/components/CreditHistoryModal";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useGlobalStore } from "@/hooks/useGlobalStore";
 
 // Helper function to open help contact
 const openHelpContact = () => {
@@ -42,6 +43,11 @@ export function TopBar() {
   const [showCreditHistory, setShowCreditHistory] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const { openSearch, openNewChat, openSettings } = useGlobalStore((s) => ({
+    openSearch: s.openSearch,
+    openNewChat: s.openNewChat,
+    openSettings: s.openSettings,
+  }));
   
   const handleGoogleSignIn = async () => {
     await signInWithGoogle();
@@ -58,8 +64,20 @@ export function TopBar() {
           <SidebarTrigger className="text-text-secondary hover:text-foreground" />
         </div>
 
-        {/* Right: Theme Toggle, My Startup, Credits and Auth */}
+        {/* Right: Quick Actions, Theme Toggle, My Startup, Credits and Auth */}
         <div className="flex items-center gap-2 sm:gap-4">
+          {/* Quick Actions */}
+          <div className="hidden md:flex items-center gap-1">
+            <Button variant="ghost" size="sm" onClick={openSearch} aria-label="Open search" className="h-8">
+              ⌘K
+            </Button>
+            <Button variant="ghost" size="sm" onClick={openNewChat} aria-label="New chat" className="h-8">
+              New
+            </Button>
+            <Button variant="ghost" size="sm" onClick={openSettings} aria-label="Open settings" className="h-8">
+              Settings
+            </Button>
+          </div>
           {/* Theme Toggle */}
           <ThemeToggle />
 

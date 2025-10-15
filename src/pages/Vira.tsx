@@ -4,6 +4,9 @@ import { TopBar } from "@/components/TopBar";
 import { ChatInterface } from "@/components/ChatInterface";
 import { HelpButton } from "@/components/HelpButton";
 import { QuickActionButton } from "@/components/QuickActionButton";
+import SearchOverlay from "@/components/SearchOverlay";
+import NewChatModal from "@/components/NewChatModal";
+import SettingsModal from "@/components/SettingsModal";
 
 const Vira = () => {
   return (
@@ -16,6 +19,9 @@ const Vira = () => {
           <main className="flex-1 overflow-hidden border-l border-border">
             <ChatInterface />
           </main>
+          <SearchOverlay />
+          <NewChatModal />
+          <SettingsModal />
         </div>
         
         <HelpButton />

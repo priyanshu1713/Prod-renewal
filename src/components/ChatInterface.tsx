@@ -12,6 +12,7 @@ import { useStartupContext } from "@/hooks/useStartupContext";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { LoadingState } from "@/components/LoadingState";
 import { usePDFGenerator } from "@/hooks/usePDFGenerator";
+import { useGlobalStore, AgentType } from "@/hooks/useGlobalStore";
 
 // Import agent profile images
 const ViraAvatar = "https://i.ibb.co/TB072BQ1/Vira.png";
@@ -74,6 +75,13 @@ export function ChatInterface() {
   const { generateReportPDF } = usePDFGenerator();
   const { credits, deductCredit, isLoggedIn, isDemoUser, enableDemoUser, showLoginModal, showPurchaseModal, showOutOfCreditsModal } = useCreditSystem();
   const [showLogin, setShowLogin] = useState(false);
+  const { activeChatId, chats, addChat, setActiveChat, appendMessage } = useGlobalStore((s) => ({
+    activeChatId: s.activeChatId,
+    chats: s.chats,
+    addChat: s.addChat,
+    setActiveChat: s.setActiveChat,
+    appendMessage: s.appendMessage,
+  }));
   
   const getModuleInfo = () => {
     switch (location.pathname) {
@@ -112,6 +120,24 @@ export function ChatInterface() {
   };
   
   const moduleInfo = getModuleInfo();
+
+  // Sync local messages from global store active chat for this agent
+  useEffect(() => {
+    const agentName = moduleInfo.title as AgentType;
+    const chat = activeChatId ? chats.find((c) => c.id === activeChatId && c.agent === agentName) : undefined;
+    if (chat) {
+      const mapped: Message[] = chat.messages.map((m) => ({
+        id: m.id,
+        content: m.content,
+        role: m.role,
+        timestamp: new Date(m.timestamp),
+      }));
+      setMessages(mapped);
+    } else {
+      // Keep local messages as-is if no active chat matches
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeChatId, chats, location.pathname]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -153,6 +179,14 @@ export function ChatInterface() {
       return;
     }
 
+    // Ensure active chat exists for this agent
+    let chatId = activeChatId;
+    const agentName = moduleInfo.title as AgentType;
+    if (!chatId) {
+      chatId = addChat(agentName, `Let's get started with ${agentName}.`);
+      setActiveChat(chatId);
+    }
+
     const userMessage: Message = {
       id: Date.now().toString(),
       content: input.trim(),
@@ -161,6 +195,12 @@ export function ChatInterface() {
     };
 
     setMessages(prev => [...prev, userMessage]);
+    appendMessage(chatId!, {
+      id: userMessage.id,
+      role: "user",
+      content: userMessage.content,
+      timestamp: userMessage.timestamp.toISOString(),
+    });
     setInput("");
     setIsLoading(true);
 
@@ -214,6 +254,12 @@ export function ChatInterface() {
           timestamp: new Date(),
         };
         setMessages(prev => [...prev, aiMessage]);
+        appendMessage(chatId!, {
+          id: aiMessage.id,
+          role: "assistant",
+          content: aiMessage.content,
+          timestamp: aiMessage.timestamp.toISOString(),
+        });
       } catch (error) {
         console.error('Stack-AI API error:', error);
         const errorMessage: Message = {
@@ -223,6 +269,12 @@ export function ChatInterface() {
           timestamp: new Date(),
         };
         setMessages(prev => [...prev, errorMessage]);
+        appendMessage(chatId!, {
+          id: errorMessage.id,
+          role: "assistant",
+          content: errorMessage.content,
+          timestamp: errorMessage.timestamp.toISOString(),
+        });
       } finally {
         setIsLoading(false);
       }
@@ -236,6 +288,12 @@ export function ChatInterface() {
           timestamp: new Date(),
         };
         setMessages(prev => [...prev, aiMessage]);
+        appendMessage(chatId!, {
+          id: aiMessage.id,
+          role: "assistant",
+          content: aiMessage.content,
+          timestamp: aiMessage.timestamp.toISOString(),
+        });
         setIsLoading(false);
       }, 3000);
     }

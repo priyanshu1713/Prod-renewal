@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { MessageSquare, History, ChevronRight, ChevronDown, Building2, Search, Plus, Settings, User, Edit2, Trash2 } from "lucide-react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarHeader, SidebarFooter, SidebarInput, useSidebar } from "@/components/ui/sidebar";
@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/components/ThemeProvider";
 // import { useStartupContext } from "@/hooks/useStartupContext";
+import { useGlobalStore } from "@/hooks/useGlobalStore";
 
 // Import agent profile images
 const ViraAvatar = "https://i.ibb.co/TB072BQ1/Vira.png";
@@ -39,19 +40,20 @@ const modules = [{
   description: "Social media handler, automates posts and generates captions",
   color: "#66BB6A"
 }];
-const chatHistory = [{
-  id: 1,
-  title: "SaaS Platform for Remote Teams",
-  timestamp: "2 hours ago"
-}, {
-  id: 2,
-  title: "AI-Powered Content Generator",
-  timestamp: "1 day ago"
-}, {
-  id: 3,
-  title: "Sustainable Fashion Marketplace",
-  timestamp: "3 days ago"
-}];
+const agentToPath = (agent: string) => {
+  switch (agent) {
+    case "Vira":
+      return "/vira";
+    case "Bizzy":
+      return "/bizzy";
+    case "Artie":
+      return "/artie";
+    case "Mak":
+      return "/mak";
+    default:
+      return "/";
+  }
+};
 export function AppSidebar() {
   const {
     state,
@@ -63,6 +65,25 @@ export function AppSidebar() {
   const isCollapsed = state === "collapsed" && !isMobile; // Never collapse on mobile
   const [isModulesExpanded, setIsModulesExpanded] = useState(true);
   const isActive = (path: string) => location.pathname === path;
+  const { openNewChat, openSearch, openSettings, chats, setActiveChat, removeChat } = useGlobalStore((s) => ({
+    openNewChat: s.openNewChat,
+    openSearch: s.openSearch,
+    openSettings: s.openSettings,
+    chats: s.chats,
+    setActiveChat: s.setActiveChat,
+    removeChat: s.removeChat,
+  }));
+  const recentChats = chats;
+  const timeAgo = useMemo(() => (iso: string) => {
+    const diff = Date.now() - new Date(iso).getTime();
+    const m = Math.floor(diff / 60000);
+    if (m < 1) return "just now";
+    if (m < 60) return `${m} min ago`;
+    const h = Math.floor(m / 60);
+    if (h < 24) return `${h} hour${h>1?'s':''} ago`;
+    const d = Math.floor(h / 24);
+    return `${d} day${d>1?'s':''} ago`;
+  }, []);
   
   // Determine which logo to show based on theme
   const logoSrc = theme === "light" 
@@ -90,6 +111,8 @@ export function AppSidebar() {
           <Button 
             variant="secondary"
             className="w-full h-10 justify-center rounded-xl bg-surface border border-border hover:bg-sidebar-hover text-sidebar-foreground gap-2"
+            onClick={openNewChat}
+            aria-label="Start a new chat"
           >
             <Plus className="w-4 h-4" />
             {!isCollapsed && <span className="font-medium">New Chat</span>}
@@ -99,6 +122,10 @@ export function AppSidebar() {
             <SidebarInput
               placeholder={isCollapsed ? "Search" : "Search conversations"}
               className="pl-9 pr-3 h-10 rounded-xl bg-surface border border-border text-sm placeholder:text-text-muted/70 focus-visible:ring-0 focus:border-sidebar-ring shadow-sm"
+              readOnly
+              onFocus={openSearch}
+              onClick={openSearch}
+              aria-label="Open search"
             />
           </div>
         </div>
@@ -198,29 +225,42 @@ export function AppSidebar() {
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="space-y-2">
-              {chatHistory.map(chat => (
+              {recentChats.map(chat => (
                 <SidebarMenuItem key={chat.id}>
-                  <SidebarMenuButton className="h-auto p-0">
-                    <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-sidebar-hover transition-all duration-300 w-full text-left group">
+                  <SidebarMenuButton className="h-auto p-0" asChild>
+                    <button
+                      className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-sidebar-hover transition-all duration-300 w-full text-left group"
+                      onClick={() => {
+                        setActiveChat(chat.id);
+                        navigate(agentToPath(chat.agent));
+                      }}
+                      aria-label={`Open chat ${chat.title}`}
+                    >
                       <MessageSquare className="w-3.5 h-3.5 flex-shrink-0 text-sidebar-foreground opacity-60 group-hover:opacity-100 transition-opacity" />
                       {!isCollapsed && (
                         <div className="flex-1 min-w-0">
                           <div className="text-sm text-sidebar-foreground truncate font-medium">{chat.title}</div>
-                          <div className="text-xs text-sidebar-foreground opacity-60 font-light">{chat.timestamp}</div>
+                          <div className="text-xs text-sidebar-foreground opacity-60 font-light">{timeAgo(chat.createdAt)}</div>
                         </div>
                       )}
                       {/* Actions */}
                       {!isCollapsed && (
                         <div className="ml-auto flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <Button variant="ghost" size="icon" className="h-7 w-7 text-text-muted hover:text-foreground" aria-label="Edit chat">
-                            <Edit2 className="w-4 h-4" />
-                          </Button>
-                          <Button variant="ghost" size="icon" className="h-7 w-7 text-text-muted hover:text-foreground" aria-label="Delete chat">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-7 w-7 text-text-muted hover:text-foreground"
+                            aria-label="Delete chat"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              removeChat(chat.id);
+                            }}
+                          >
                             <Trash2 className="w-4 h-4" />
                           </Button>
                         </div>
                       )}
-                    </div>
+                    </button>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -232,11 +272,11 @@ export function AppSidebar() {
       {/* Footer - fixed to bottom */}
       <SidebarFooter className="mt-auto border-t border-sidebar-border p-3">
         <div className="flex items-center justify-between gap-2">
-          <Button variant="ghost" className="flex-1 justify-start h-10 rounded-lg hover:bg-sidebar-hover">
+          <Button variant="ghost" className="flex-1 justify-start h-10 rounded-lg hover:bg-sidebar-hover" onClick={openSettings} aria-label="Open settings">
             <Settings className="w-4 h-4 mr-2" />
             {!isCollapsed && <span>Settings</span>}
           </Button>
-          <Button variant="ghost" className="flex-1 justify-start h-10 rounded-lg hover:bg-sidebar-hover">
+          <Button variant="ghost" className="flex-1 justify-start h-10 rounded-lg hover:bg-sidebar-hover" onClick={() => navigate('/profile')} aria-label="Open profile">
             <User className="w-4 h-4 mr-2" />
             {!isCollapsed && <span>Profile</span>}
           </Button>
