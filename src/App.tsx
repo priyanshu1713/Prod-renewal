@@ -14,6 +14,7 @@ import Mak from "./pages/Mak";
 import Vira from "./pages/Vira";
 import MyStartup from "./pages/MyStartup";
 import NotFound from "./pages/NotFound";
+import ProfilePage from "./pages/ProfilePage";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +41,7 @@ const App = () => {
                 <Route path="/mak" element={<Mak />} />
                 <Route path="/vira" element={<Vira />} />
                 <Route path="/my-startup" element={<MyStartup />} />
+                <Route path="/profile" element={<ProfilePage />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
